@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from contextlib import asynccontextmanager
 
-from db.init_data import create_tables, init_db
+from db.init_data import init_database
 from db.engine import SessionLocal
 from routers import posts as post_router
 
@@ -11,11 +11,9 @@ from routers import posts as post_router
 async def lifespan(app: FastAPI):
     print("--- Lifespan event: startup ---")
     try:
-        # 現在 create_tables() 會確保所有模型都已載入
-        create_tables()
         
         db = SessionLocal()
-        init_db(db)
+        init_database(db)
         db.close()
     except Exception as e:
         print(f"啟動過程中發生嚴重錯誤: {e}")
@@ -56,5 +54,6 @@ if __name__ == "__main__":
     # 運行在 8000 埠
 
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+
 
 
