@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-DATABASE_URL = "sqlite:///./app.db"
+DATABASE_URL = "postgresql://postgres.scffeynwqeksxkvhlcig:elle28450744@aws-1-us-east-1.pooler.supabase.com:5432/postgres"
 
 engine = create_engine(
     DATABASE_URL,
@@ -14,4 +14,5 @@ def get_db():
         try:
             yield session
         finally:
+
             session.close()
