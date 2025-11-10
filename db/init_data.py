@@ -28,7 +28,8 @@ def init_posts_data():
                     title=post_data["title"],
                     author=post_data["author"],
                     content=post_data["content"],
-                    image_url=post_data["image_url"]
+                    image_url=post_data["image_url"],
+                    tags=post_data["tags"]
                 )
                 session.add(post)
             
@@ -44,4 +45,5 @@ def init_database():
     logger.info("開始初始化資料庫資料...")    
     # 初始化文章資料
     init_posts_data()
+
     logger.info("資料庫資料初始化完成")
