@@ -36,7 +36,7 @@ async def read_index():
 
 @app.get("/blog.html")
 async def read_blog_html():
-    return FileResponse('static/blog.html')
+    return FileResponse('static/list.html')
 
 @app.get("/post.html")
 async def read_post_html():
@@ -51,3 +51,4 @@ if __name__ == "__main__":
     # 運行在 8000 埠
 
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+
