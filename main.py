@@ -4,7 +4,7 @@ from fastapi.responses import FileResponse
 from contextlib import asynccontextmanager
 
 from db.init_data import init_database
-from db.engine import SessionLocal
+from db.engine import get_db
 from routers import posts as post_router
 
 @asynccontextmanager
@@ -12,7 +12,7 @@ async def lifespan(app: FastAPI):
     print("--- Lifespan event: startup ---")
     try:
         
-        db = SessionLocal()
+        db = get_db()
         init_database(db)
         db.close()
     except Exception as e:
@@ -36,7 +36,7 @@ async def read_index():
     # 使用絕對路徑確保檔案被找到
     return FileResponse(os.path.join(STATIC_DIR, 'index.html'))
 
-@app.get("/blog.html")
+@app.get("/list.html")
 async def read_blog_html():
     return FileResponse(os.path.join(STATIC_DIR, 'list.html')) # 修正為 list.html
 
@@ -54,6 +54,7 @@ if __name__ == "__main__":
     # 運行在 8000 埠
 
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+
 
 
 
