@@ -7,6 +7,7 @@ from db.init_data import init_database
 from db.engine import get_db
 from routers import posts as post_router
 import os
+import uvicorn
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -48,14 +49,6 @@ async def read_post_html():
 
 # 靜態檔案掛載的部分也確保目錄正確（但這裡保持 'static' 可能沒問題）
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
-
-# 註冊路由
-app.include_router(posts_router)
-
-if __name__ == "__main__":
-    # 運行在 8000 埠
-
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
 
 
 
