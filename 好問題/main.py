@@ -51,12 +51,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 修正 2: 設定靜態檔案服務
-app.mount("/img", StaticFiles(directory="img"), name="img")
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # 註冊路由
 app.include_router(posts_router)
 
 if __name__ == "__main__":
     # 運行在 8000 埠
+
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
