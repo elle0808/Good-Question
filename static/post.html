@@ -61,7 +61,7 @@
 
    <script>
     // === 設定 ===
-    const API_BASE_URL = "http://127.0.0.1:8000"; 
+    const API_BASE_URL = "/api/posts"; 
     const urlParams = new URLSearchParams(window.location.search);
     const postSlug = urlParams.get('slug'); 
     
@@ -199,4 +199,5 @@
     document.addEventListener('DOMContentLoaded', loadPostData);
 </script>
 </body>
+
 </html>
