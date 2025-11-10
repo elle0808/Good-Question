@@ -30,18 +30,23 @@ app.include_router(post_router.router)
 
 
 # --- 靜態檔案服務 (以下不變) ---
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+
 @app.get("/")
 async def read_index():
-    return FileResponse('static/index.html')
+    # 使用絕對路徑確保檔案被找到
+    return FileResponse(os.path.join(STATIC_DIR, 'index.html'))
 
 @app.get("/blog.html")
 async def read_blog_html():
-    return FileResponse('static/list.html')
+    return FileResponse(os.path.join(STATIC_DIR, 'list.html')) # 修正為 list.html
 
 @app.get("/post.html")
 async def read_post_html():
-    return FileResponse('static/post.html')
+    return FileResponse(os.path.join(STATIC_DIR, 'post.html'))
 
+# 靜態檔案掛載的部分也確保目錄正確（但這裡保持 'static' 可能沒問題）
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 # 註冊路由
@@ -51,4 +56,5 @@ if __name__ == "__main__":
     # 運行在 8000 埠
 
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+
 
