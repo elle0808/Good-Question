@@ -1,63 +1,24 @@
-# main.py
-import uvicorn
+# main.py - 測試用
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from contextlib import asynccontextmanager
+import uvicorn
 import logging
 
-from db.engine import engine
-from db.init_data import init_database
-from models.base import Base
-from routers.posts import router as posts_router
+logging.basicConfig(level=logging.INFO)
 
-# 設定日誌 - 更詳細的格式
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
-logger = logging.getLogger(__name__)
+# 移除 lifespan 函式以排除資料庫問題
+# app = FastAPI(title="Blog API", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="Test API", version="1.0.0")
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """應用程式生命週期管理"""
-    # 啟動時執行
-    try:
-        logger.info("正在初始化資料庫...")
-        Base.metadata.create_all(engine)
-        logger.info("資料庫結構初始化完成")
-        
-        # 初始化資料
-        init_database()
-        
-    except Exception as e:
-        logger.error(f"應用程式初始化失敗: {e}")
-        raise
-    
-    yield
-    
-    # 關閉時執行（可以在這裡添加清理邏輯）
-    logger.info("應用程式正在關閉...")
-    
-app = FastAPI(title="Blog API", version="1.0.0", lifespan=lifespan)
+@app.get("/hello")
+def read_root():
+    return {"status": "ok", "message": "FastAPI is running on Vercel!"}
 
-# CORS：視需求收斂 allow_origins
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# 移除所有路由和靜態文件掛載
+# app.include_router(posts_router)
+# app.mount(...)
 
+# 為了 Vercel 部署，可以移除 __name__ == "__main__" 區塊，或保持不變
+# if __name__ == "__main__":
+#     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
-# 註冊路由
-app.include_router(posts_router)
-
-if __name__ == "__main__":
-    # 運行在 8000 埠
-
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+# Vercel 只會讀取頂層的 app 實例
