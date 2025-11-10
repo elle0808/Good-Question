@@ -6,6 +6,7 @@ from contextlib import asynccontextmanager
 from db.init_data import init_database
 from db.engine import get_db
 from routers import posts as post_router
+import os
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -55,6 +56,7 @@ if __name__ == "__main__":
     # 運行在 8000 埠
 
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+
 
 
 
