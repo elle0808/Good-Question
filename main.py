@@ -11,10 +11,11 @@ from routers import posts as post_router
 async def lifespan(app: FastAPI):
     print("--- Lifespan event: startup ---")
     try:
+
+        db = next(get_db()) 
+        init_database(db) 
         
-        db = get_db()
-        init_database(db)
-        db.close()
+        print("資料庫初始化成功完成。")
     except Exception as e:
         print(f"啟動過程中發生嚴重錯誤: {e}")
     
@@ -54,6 +55,7 @@ if __name__ == "__main__":
     # 運行在 8000 埠
 
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+
 
 
 
