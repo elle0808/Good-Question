@@ -21,7 +21,10 @@
                     'custom-dark-brown': '#4D3110',      
                 },
                 borderRadius: {
-                    'xl-2': '16px', // 大多數卡片的圓角
+                    'xl-2': '16px', // 卡片圓角
+                },
+                borderWidth:{
+                    'thick':'6px'
                 }
             }
         }
@@ -46,7 +49,7 @@
 
         <div id="question-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-            <article class="bg-custom-light-yellow rounded-xl-2 p-[10px] border-2 border-custom-accent-yellow /50 hover:transform transition duration-300  hover:-translate-y-1 bg-blue-500 text-white py-3 px-4 roundedcursor-pointer">
+            <article class="bg-custom-light-yellow rounded-xl-2 p-[10px] border-thick border-custom-accent-yellow /50 hover:transform transition duration-300  hover:-translate-y-1 bg-blue-500 text-white py-3 px-4 roundedcursor-pointer">
                 <h3 class="text-xl font-bold text-gray-800 mb-2 pb-2 border-b-2 border-custom-dark-brown">
                     標題
                 </h3>
@@ -59,7 +62,7 @@
                     <span class="inline-block bg-custom-accent-yellow/30 text-custom-dark-brown px-3 py-1 rounded-full text-xs font-medium">#標籤</span>
                 </div>
             </article>
-             <article class="bg-custom-light-yellow rounded-xl-2 p-[10px] border-2 border-custom-accent-yellow /50 hover:transform transition duration-300  hover:-translate-y-1 bg-blue-500 text-white py-3 px-4 roundedcursor-pointer">
+             <article class="bg-custom-light-yellow rounded-xl-2 p-[10px] border-thick border-custom-accent-yellow /50 hover:transform transition duration-300  hover:-translate-y-1 bg-blue-500 text-white py-3 px-4 roundedcursor-pointer">
                 <h3 class="text-xl font-bold text-gray-800 mb-2 pb-2 border-b-2 border-custom-dark-brown">
                     標題
                 </h3>
@@ -108,17 +111,16 @@
 
     /**
      * 根據單篇文章資料生成對應的HTML字串
-     * **此處已修正為您的黃色設計稿卡片樣式**
      */
     function createCardHTML(post, summary) {
         
         // 渲染圖片 (如果存在)
         const imageHtml = renderImage(post.image_url, post.title);
 
-        // 您的黃色卡片樣式結構
+        // 卡片樣式
         return `
             <article 
-                class="bg-custom-light-yellow rounded-xl-2 p-[10px] border-2 border-custom-accent-yellow shadow-md shadow-custom-accent-yellow/50 hover:transform transition duration-300 hover:-translate-y-1 cursor-pointer"
+                class="bg-custom-light-yellow rounded-xl-2 p-[10px] border-thick border-custom-accent-yellow shadow-md shadow-custom-accent-yellow/50 hover:transform transition duration-300 hover:-translate-y-1 cursor-pointer"
                 onclick="window.location.href='./post.html?slug=${post.slug}'" 
             >
                 ${imageHtml}
@@ -196,6 +198,7 @@
 </body>
 
 </html>
+
 
 
 
