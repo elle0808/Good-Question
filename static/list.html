@@ -76,6 +76,64 @@
 
             </div>
     </main>
+    <!-- Dialog -->
+  <dialog id="loginDialog" class="backdrop:bg-black/60 backdrop:backdrop-blur-sm bg-transparent focus:outline-none">
+    <div
+      class="relative bg-white border-[#f0e36e] border-[6px] rounded-[40px] md:rounded-[80px] h-auto min-h-[60vh] w-[90vw] max-w-[500px] overflow-hidden shadow-2xl scale-95 transition-transform duration-300 p-8 flex flex-col items-center"
+      id="modalContent">
+      <h2 class="mt-8 mb-10 font-bold text-[#f19124] text-4xl md:text-5xl select-none text-center">
+        登入
+      </h2>
+      <div class="w-full space-y-6 flex flex-col items-center">
+        <div
+          class="w-full h-16 md:h-20 flex items-center px-6 bg-white border-[#f0e36e] border-[4px] rounded-full transition-all focus-within:border-[#f19124]">
+          <label class="text-[#f19124] text-lg md:text-xl shrink-0 select-none">帳號：</label>
+          <input type="text" id="username" name="username"
+            class="flex-1 bg-transparent text-lg md:text-xl text-[#b16208] focus:outline-none focus:ring-0 px-2
+            placeholder="請輸入帳號(email)" />
+        </div>
+        <div
+          class="w-full h-16 md:h-20 flex items-center px-6 bg-white border-[#f0e36e] border-[4px] rounded-full transition-all focus-within:border-[#f19124]">
+          <label class="text-[#f19124] text-lg md:text-xl shrink-0 select-none">密碼：</label>
+          <input type="password" id="password" name="password"
+            class="flex-1 bg-transparent text-lg md:text-xl text-[#b16208] focus:outline-none focus:ring-0 px-2" />
+        </div>
+        <div class="flex gap-6 mt-2">
+          <button class="text-[#b16208] text-base md:text-lg hover:text-[#f19124] transition-colors">註冊</button>
+          <button class="text-[#b16208] text-base md:text-lg hover:text-[#f19124] transition-colors">忘記密碼?</button>
+        </div>
+        <button
+          class="w-3/4 h-14 md:h-16 mt-6 bg-[#F0E36E] rounded-full text-[#b16208] text-xl md:text-2xl font-semibold hover:bg-[#F8EF9A] active:scale-95 transition-all shadow-md">
+          登入
+        </button>
+      </div>
+
+    </div>
+  </dialog>
+
+  <script>
+    const modal = document.getElementById('loginDialog');
+
+    function openLoginModal() {
+      modal.showModal();
+      // 讓視窗出現時有一點點放大效果
+      document.getElementById('modalContent').classList.remove('scale-95');
+      document.getElementById('modalContent').classList.add('scale-100');
+    }
+
+    function closeLoginModal() {
+      modal.close();
+      document.getElementById('modalContent').classList.add('scale-95');
+      document.getElementById('modalContent').classList.remove('scale-100');
+    }
+
+    // 點擊背景遮罩關閉
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeLoginModal();
+      }
+    });
+  </script>
 <script>
     const POSTS_API_URL = '/api/posts'; 
     
@@ -198,6 +256,7 @@
 </body>
 
 </html>
+
 
 
 
