@@ -2,7 +2,10 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from contextlib import contextmanager
+from dotenv import load_dotenv
 # from sqlalchemy.orm import sessionmaker # 移除 SessionLocal，直接使用 Session(engine)
+
+load_dotenv()
 
 # 1. 移除硬編碼的 DATABASE_URL 和硬性檢查
 DATABASE_URL = os.environ.get("DATABASE_URL")
