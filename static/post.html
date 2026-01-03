@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,21 +8,23 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body class="bg-[#FFFFFF] min-h-screen">
 
-  <header class="font-['Roboto:Regular'] bg-[#F0E36E] flex justify-between items-center px-6 py-3">
-    <h1 class="text-lg font-bold text-[#854D0C]"><a href="index.html">好問題！</a></h1>
-    <nav class="flex items-center space-x-6">
-      <a href="list.html" class="text-[#854D0C] hover:text-[#FF9925] duration-300">最新問題</a>
-      <button class="bg-[#F79C33] text-white px-4 py-1.5 rounded-lg hover:bg-[#F9BB48] duration-300 transition" onclick="openLoginModal()">登入 / 註冊</button>
-    </nav>
-  </header>
+    <header class="font-['Roboto:Regular'] bg-[#F0E36E] flex justify-between items-center px-6 py-3">
+        <h1 class="text-lg font-bold text-[#854D0C]"><a href="index.html">好問題！</a></h1>
+        <nav class="flex items-center space-x-6">
+            <a href="list.html" class="text-[#854D0C] hover:text-[#FF9925] duration-300">最新問題</a>
+            <button class="bg-[#F79C33] text-white px-4 py-1.5 rounded-lg hover:bg-[#F9BB48] duration-300 transition"
+                onclick="openLoginModal()">登入 / 註冊</button>
+        </nav>
+    </header>
 
-    <main class="container mx-auto p-4 max-w-7xl">
-        
+    <main class="container mx-auto p-4 max-w-[1600px] w-[75vw] min-w-[320px]">
+
         <section id="article-container" class="bg-white p-6 rounded-[25px] mb-6 border-[3px] border-[#F0E36E]">
             <h1 class="text-2xl font-bold mb-2" id="article-title">載入中...</h1>
-            
+
             <div class="h-1 bg-[#854D0C] mb-4"></div>
 
             <div class="flex items-center text-sm text-gray-500 space-x-4 mb-4">
@@ -30,23 +33,24 @@
                 </span>
                 <span id="article-time"></span>
             </div>
-            
+
             <div class="min-h-[120px] text-gray-800 leading-relaxed pt-2" id="article-content"></div>
-            
+
             <div class="mt-4" id="article-tags-container"></div>
         </section>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
+
             <section class="lg:col-span-2">
                 <h2 class="text-2xl font-bold mb-4 text-gray-800">回答</h2>
 
                 <div class="bg-white p-2 rounded-[50px] border-[3px] border-[#F0E36E] mb-4">
-                    <input type="text" placeholder="我要回答..." class="w-full p-2 border-none bg-transparent placeholder-gray-400 focus:outline-none text-gray-800">
+                    <input type="text" placeholder="我要回答..."
+                        class="w-full p-2 border-none bg-transparent placeholder-gray-400 focus:outline-none text-gray-800">
                 </div>
 
                 <div id="answers-container">
-                    </div>
+                </div>
             </section>
 
             <aside class="lg:col-span-1">
@@ -54,140 +58,146 @@
                     類似問題
                 </h3>
                 <div id="similar-questions-container" class="space-y-4">
-                    </div>
+                </div>
             </aside>
         </div>
     </main>
 
-        <!-- Dialog -->
-  <dialog id="loginDialog" class="backdrop:bg-black/60 backdrop:backdrop-blur-sm bg-transparent focus:outline-none">
-    <div
-      class="relative bg-white border-[#f0e36e] border-[6px] rounded-[40px] md:rounded-[80px] h-auto min-h-[60vh] w-[90vw] max-w-[500px] overflow-hidden shadow-2xl scale-95 transition-transform duration-300 p-8 flex flex-col items-center"
-      id="modalContent">
-      <h2 class="mt-8 mb-10 font-bold text-[#f19124] text-4xl md:text-5xl select-none text-center">
-        登入
-      </h2>
-      <div class="w-full space-y-6 flex flex-col items-center">
-        <div
-          class="w-full h-16 md:h-20 flex items-center px-6 bg-white border-[#f0e36e] border-[4px] rounded-full transition-all focus-within:border-[#f19124]">
-          <label class="text-[#f19124] text-lg md:text-xl shrink-0 select-none">帳號：</label>
-          <input type="text" id="username" name="username"
-            class="flex-1 bg-transparent text-lg md:text-xl text-[#b16208] focus:outline-none focus:ring-0 px-2
-            placeholder="請輸入帳號(email)" />
+    <!-- Dialog -->
+    <dialog id="loginDialog" class="backdrop:bg-black/60 backdrop:backdrop-blur-sm bg-transparent focus:outline-none">
+        <div class="relative bg-white border-[#f0e36e] border-[6px] rounded-[40px] md:rounded-[80px] h-auto min-h-[60vh] w-[90vw] max-w-[500px] overflow-hidden shadow-2xl scale-95 transition-transform duration-300 p-8 flex flex-col items-center"
+            id="modalContent">
+            <h2 class="mt-8 mb-10 font-bold text-[#f19124] text-4xl md:text-5xl select-none text-center">
+                登入
+            </h2>
+            <div class="w-full space-y-6 flex flex-col items-center">
+                <div
+                    class="w-full h-16 md:h-20 flex items-center px-6 bg-white border-[#f0e36e] border-[4px] rounded-full transition-all focus-within:border-[#f19124]">
+                    <label class="text-[#f19124] text-lg md:text-xl shrink-0 select-none">帳號：</label>
+                    <input type="text" id="username" name="username"
+                        class="flex-1 bg-transparent text-lg md:text-xl text-[#b16208] focus:outline-none focus:ring-0 px-2"
+                        placeholder=" 請輸入帳號(email)" />
+                </div>
+                <div
+                    class="w-full h-16 md:h-20 flex items-center px-6 bg-white border-[#f0e36e] border-[4px] rounded-full transition-all focus-within:border-[#f19124]">
+                    <label class="text-[#f19124] text-lg md:text-xl shrink-0 select-none">密碼：</label>
+                    <input type="password" id="password" name="password"
+                        class="flex-1 bg-transparent text-lg md:text-xl text-[#b16208] focus:outline-none focus:ring-0 px-2" />
+                </div>
+                <div class="flex gap-6 mt-2">
+                    <button
+                        class="text-[#b16208] text-base md:text-lg hover:text-[#f19124] transition-colors">註冊</button>
+                    <button
+                        class="text-[#b16208] text-base md:text-lg hover:text-[#f19124] transition-colors">忘記密碼?</button>
+                </div>
+                <button
+                    class="w-3/4 h-14 md:h-16 mt-6 bg-[#F0E36E] rounded-full text-[#b16208] text-xl md:text-2xl font-semibold hover:bg-[#F8EF9A] active:scale-95 transition-all shadow-md">
+                    登入
+                </button>
+            </div>
+
         </div>
-        <div
-          class="w-full h-16 md:h-20 flex items-center px-6 bg-white border-[#f0e36e] border-[4px] rounded-full transition-all focus-within:border-[#f19124]">
-          <label class="text-[#f19124] text-lg md:text-xl shrink-0 select-none">密碼：</label>
-          <input type="password" id="password" name="password"
-            class="flex-1 bg-transparent text-lg md:text-xl text-[#b16208] focus:outline-none focus:ring-0 px-2" />
+    </dialog>
+
+    <script>
+        const modal = document.getElementById('loginDialog');
+
+        function openLoginModal() {
+            modal.showModal();
+            // 讓視窗出現時有一點點放大效果
+            document.getElementById('modalContent').classList.remove('scale-95');
+            document.getElementById('modalContent').classList.add('scale-100');
+        }
+
+        function closeLoginModal() {
+            modal.close();
+            document.getElementById('modalContent').classList.add('scale-95');
+            document.getElementById('modalContent').classList.remove('scale-100');
+        }
+
+        // 點擊背景遮罩關閉
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeLoginModal();
+            }
+        });
+    </script>
+
+    <script>
+        // === 設定 ===
+        const API_BASE_URL = "/api/posts";
+        const urlParams = new URLSearchParams(window.location.search);
+        const postSlug = urlParams.get('slug');
+
+        // ----------------------------------------------------
+        // [渲染函數 - 保持不變]
+        // ----------------------------------------------------
+        function renderArticle(article) {
+            // ... (保持原樣，這裡需要 article 物件) ...
+            document.getElementById('article-title').textContent = article.title;
+            document.getElementById('article-author').textContent = (article.author && article.author.username) ? article.author.username : '匿名作者';
+            document.getElementById('article-time').textContent = article.time;
+            document.getElementById('article-content').innerHTML = article.content ? article.content.replace(/\n/g, '<br>') : '沒有內容';
+
+            const tagsContainer = document.getElementById('article-tags-container');
+            tagsContainer.innerHTML = '';
+            if (article.tags && Array.isArray(article.tags)) {
+                article.tags.forEach(tag => {
+                    const tagSpan = document.createElement('span');
+                    tagSpan.className = 'inline-block text-gray-500 text-sm mr-2';
+                    tagSpan.textContent = `#${tag}`;
+                    tagsContainer.appendChild(tagSpan);
+                });
+            }
+        }
+
+        function renderAnswers(answers) {
+            // ... (保持原樣，這裡需要 answers 陣列) ...
+            const container = document.getElementById('answers-container');
+            container.innerHTML = '';
+            if (!answers || answers.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 p-5">目前沒有人回答，搶頭香吧！</p>';
+                return;
+            }
+            // ... (渲染回答項目的邏輯) ...
+            answers.forEach(answer => {
+                // 判斷作者名稱：優先看是否匿名，若不匿名則讀取 username
+                const displayName = answer.is_anonymous
+                    ? '匿名'
+                    : (answer.author ? answer.author.username : '未知用戶');
+
+                const answerDiv = `
+        <div class="bg-white p-5 rounded-[25px] border-[3px] border-[#F0E36E] mb-4">
+            <div class="flex items-center text-sm text-gray-500 space-x-4 mb-2">
+                <span class="flex items-center">
+                    <i class="fas fa-user-circle mr-1 text-gray-600"></i> ${displayName}
+                </span>
+                <span>${answer.time || '剛剛'}</span>
+            </div>
+            <div class="text-gray-700">
+                ${answer.content}
+            </div>
         </div>
-        <div class="flex gap-6 mt-2">
-          <button class="text-[#b16208] text-base md:text-lg hover:text-[#f19124] transition-colors">註冊</button>
-          <button class="text-[#b16208] text-base md:text-lg hover:text-[#f19124] transition-colors">忘記密碼?</button>
-        </div>
-        <button
-          class="w-3/4 h-14 md:h-16 mt-6 bg-[#F0E36E] rounded-full text-[#b16208] text-xl md:text-2xl font-semibold hover:bg-[#F8EF9A] active:scale-95 transition-all shadow-md">
-          登入
-        </button>
-      </div>
-
-    </div>
-  </dialog>
-
-  <script>
-    const modal = document.getElementById('loginDialog');
-
-    function openLoginModal() {
-      modal.showModal();
-      // 讓視窗出現時有一點點放大效果
-      document.getElementById('modalContent').classList.remove('scale-95');
-      document.getElementById('modalContent').classList.add('scale-100');
-    }
-
-    function closeLoginModal() {
-      modal.close();
-      document.getElementById('modalContent').classList.add('scale-95');
-      document.getElementById('modalContent').classList.remove('scale-100');
-    }
-
-    // 點擊背景遮罩關閉
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        closeLoginModal();
-      }
-    });
-  </script>
-
-   <script>
-    // === 設定 ===
-    const API_BASE_URL = "/api/posts"; 
-    const urlParams = new URLSearchParams(window.location.search);
-    const postSlug = urlParams.get('slug'); 
-    
-    // ----------------------------------------------------
-    // [渲染函數 - 保持不變]
-    // ----------------------------------------------------
-    function renderArticle(article) {
-        // ... (保持原樣，這裡需要 article 物件) ...
-        document.getElementById('article-title').textContent = article.title;
-        document.getElementById('article-author').textContent = article.author || '匿名作者';
-        document.getElementById('article-time').textContent = article.time;
-        document.getElementById('article-content').innerHTML = article.content ? article.content.replace(/\n/g, '<br>') : '沒有內容'; 
-
-        const tagsContainer = document.getElementById('article-tags-container');
-        tagsContainer.innerHTML = '';
-        if (article.tags && Array.isArray(article.tags)) {
-            article.tags.forEach(tag => {
-                const tagSpan = document.createElement('span');
-                tagSpan.className = 'inline-block text-gray-500 text-sm mr-2';
-                tagSpan.textContent = `#${tag}`;
-                tagsContainer.appendChild(tagSpan);
+    `;
+                container.innerHTML += answerDiv;
             });
         }
-    }
 
-    function renderAnswers(answers) {
-        // ... (保持原樣，這裡需要 answers 陣列) ...
-        const container = document.getElementById('answers-container');
-        container.innerHTML = ''; 
-        if (!answers || answers.length === 0) {
-             container.innerHTML = '<p class="text-gray-500 p-5">目前沒有人回答，搶頭香吧！</p>';
-             return;
-        }
-        // ... (渲染回答項目的邏輯) ...
-        answers.forEach(answer => {
-            const answerDiv = `
-                <div class="bg-white p-5 rounded-[25px] border-[3px] border-[#F0E36E] mb-4">
-                    <div class="flex items-center text-sm text-gray-500 space-x-4 mb-2">
-                        <span class="flex items-center">
-                            <i class="fas fa-user-circle mr-1 text-gray-600"></i> ${answer.author || '匿名'}
-                        </span>
-                        <span>${answer.time}</span>
-                    </div>
-                    <div class="text-gray-700">
-                        ${answer.content}
-                    </div>
-                </div>
-            `;
-            container.innerHTML += answerDiv;
-        });
-    }
+        function renderSimilarQuestions(questions) {
+            // ... (保持原樣，這裡需要 similar_questions 陣列) ...
+            const container = document.getElementById('similar-questions-container');
+            container.innerHTML = '';
+            if (!questions || questions.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 p-3">沒有找到類似問題。</p>';
+                return;
+            }
+            // ... (渲染類似問題項目的邏輯) ...
+            questions.forEach(q => {
+                const tagsHtml = q.tags.map(tag =>
+                    `<span class="inline-block text-gray-500 text-sm mr-1">#${tag}</span>`
+                ).join('');
 
-    function renderSimilarQuestions(questions) {
-        // ... (保持原樣，這裡需要 similar_questions 陣列) ...
-        const container = document.getElementById('similar-questions-container');
-        container.innerHTML = '';
-        if (!questions || questions.length === 0) {
-             container.innerHTML = '<p class="text-gray-500 p-3">沒有找到類似問題。</p>';
-             return;
-        }
-        // ... (渲染類似問題項目的邏輯) ...
-        questions.forEach(q => {
-            const tagsHtml = q.tags.map(tag => 
-                `<span class="inline-block text-gray-500 text-sm mr-1">#${tag}</span>`
-            ).join('');
-
-            const questionDiv = `
+                const questionDiv = `
                 <div class="rounded-[20px] px-4 py-3 border-[3px] border-[#F0E36E]">
                     <h4 class="text-lg font-semibold text-gray-700">${q.title}</h4>
                     <p class="text-sm text-gray-600 mb-2">${q.excerpt}</p>
@@ -197,71 +207,70 @@
                     </div>
                 </div>
             `;
-            container.innerHTML += questionDiv;
-        });
-    }
-    
-    // ----------------------------------------------------
-    // 主函數：獲取資料並渲染的核心邏輯 (已修正)
-    // ----------------------------------------------------
-    async function loadPostData() {
-        if (!postSlug) {
-            document.getElementById('article-title').textContent = "⚠️ 缺少文章 Slug";
-            document.getElementById('article-content').textContent = "請在 URL 中提供 ?slug=xxx 參數。";
-            return;
+                container.innerHTML += questionDiv;
+            });
         }
 
-        const apiUrl = `${API_BASE_URL}/${postSlug}`; 
-
-        document.getElementById('article-title').textContent = "正在載入文章...";
-        document.getElementById('article-content').innerHTML = "請稍候...";
-
-
-        try {
-            const response = await fetch(apiUrl);
-            
-            if (!response.ok) {
-                throw new Error(`API 請求失敗，狀態碼: ${response.status}.`);
+        // ----------------------------------------------------
+        // 主函數：獲取資料並渲染的核心邏輯 (已修正)
+        // ----------------------------------------------------
+        async function loadPostData() {
+            if (!postSlug) {
+                document.getElementById('article-title').textContent = "⚠️ 缺少文章 Slug";
+                document.getElementById('article-content').textContent = "請在 URL 中提供 ?slug=xxx 參數。";
+                return;
             }
 
-            // 核心修正：API 返回的是單個文章物件，所以 data 就是文章物件
-            const articleData = await response.json(); 
-            
-            // --- 執行渲染 ---
-            
-            // 1. 渲染文章：直接使用 API 返回的物件
-            renderArticle(articleData); 
-            
-            // 2. 渲染回答：因為 API 只返回文章，這裡我們模擬一個空的回答列表
-            //    (如果您有單獨的 API /api/posts/{slug}/comments，您需要再次呼叫)
-            //    如果您的 PostResponse 包含了 comments/answers，則使用 articleData.comments/articleData.answers
-            const dummyAnswers = [
-                { author: articleData.author, content: "文章已載入，但回答列表需要單獨的 API 數據。", time: "現在" }
-            ];
-            renderAnswers(articleData.comments || articleData.answers || dummyAnswers); // 嘗試使用 PostResponse 中的屬性
+            const apiUrl = `${API_BASE_URL}/${postSlug}`;
 
-            // 3. 渲染類似問題：這裡也必須是模擬的，因為單個文章 API 沒提供這個數據
-            const dummySimilar = [
-                 { title: "無法獲取相關數據", excerpt: "請修改後端路由來一次性返回全部數據。", tags: ["後端", "API"] }
-            ];
-            renderSimilarQuestions(articleData.similar_posts || articleData.related || dummySimilar); // 嘗試使用 PostResponse 中的屬性
-            
-        } catch (error) {
-            console.error("載入文章失敗:", error);
-            
-            document.getElementById('article-title').textContent = `⚠️ 文章載入失敗 (Slug: ${postSlug})`;
-            document.getElementById('article-content').innerHTML = 
-                `無法從伺服器獲取數據。<br>錯誤詳情: ${error.message}`;
+            document.getElementById('article-title').textContent = "正在載入文章...";
+            document.getElementById('article-content').innerHTML = "請稍候...";
+
+
+            try {
+                const response = await fetch(apiUrl);
+
+                if (!response.ok) {
+                    throw new Error(`API 請求失敗，狀態碼: ${response.status}.`);
+                }
+
+                // 核心修正：API 返回的是單個文章物件，所以 data 就是文章物件
+                const articleData = await response.json();
+
+                // --- 執行渲染 ---
+
+                // 1. 渲染文章：直接使用 API 返回的物件
+                renderArticle(articleData);
+
+                // 2. 渲染回答：因為 API 只返回文章，這裡我們模擬一個空的回答列表
+                //    (如果您有單獨的 API /api/posts/{slug}/comments，您需要再次呼叫)
+                //    如果您的 PostResponse 包含了 comments/answers，則使用 articleData.comments/articleData.answers
+                const commentsRes = await fetch(`${API_BASE_URL}/${postSlug}/comments`);
+                if (commentsRes.ok) {
+                    const realComments = await commentsRes.json();
+                    renderAnswers(realComments); // 這裡會傳入資料庫裡的「阿椎伯」
+                } else {
+                    // 如果沒抓到留言，顯示空狀態
+                    renderAnswers([]);
+                }
+
+                // 3. 渲染類似問題：這裡也必須是模擬的，因為單個文章 API 沒提供這個數據
+                const dummySimilar = [
+                    { title: "無法獲取相關數據", excerpt: "請修改後端路由來一次性返回全部數據。", tags: ["後端", "API"] }
+                ];
+                renderSimilarQuestions(articleData.similar_posts || articleData.related || dummySimilar); // 嘗試使用 PostResponse 中的屬性
+
+            } catch (error) {
+                console.error("載入文章失敗:", error);
+
+                document.getElementById('article-title').textContent = `⚠️ 文章載入失敗 (Slug: ${postSlug})`;
+                document.getElementById('article-content').innerHTML =
+                    `無法從伺服器獲取數據。<br>錯誤詳情: ${error.message}`;
+            }
         }
-    }
 
-    document.addEventListener('DOMContentLoaded', loadPostData);
-</script>
+        document.addEventListener('DOMContentLoaded', loadPostData);
+    </script>
 </body>
 
 </html>
-
-
-
-
-

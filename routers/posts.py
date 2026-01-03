@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 
 from db.engine import get_db
-from models.posts import PostDB
+from models.posts import PostDB,CommentDB
 from schemas.posts import PostResponse, CommentCreate,CommentResponse
 
 router = APIRouter(
@@ -34,51 +34,37 @@ def get_post_by_slug(slug: str, db: Session = Depends(get_db)):
 # ----------------------------------------------------
 ## 留言 (Comment) 路由
 # ----------------------------------------------------
-@router.post("/{slug}/comment", status_code=201, response_model=CommentResponse, summary="新增留言")
-def add_comment(
-    slug: str, 
-    comment_data: CommentCreate, 
-    db: Session = Depends(get_db)
-):
+@router.get("/{slug}/comments", response_model=List[CommentResponse])
+def list_comments_for_post(slug: str, db: Session = Depends(get_db)):
+    # 1. 找到對應的文章
     post = db.scalar(select(PostDB).where(PostDB.slug == slug))
     if not post:
-        raise HTTPException(status_code=404, detail="Post not found")
-
-    # 1. 【TODO】新增留言到資料庫的邏輯
+        raise HTTPException(status_code=404, detail="文章不存在")
+        
+    # 2. 從資料庫查詢該文章的所有留言
+    # 重點：SQLAlchemy 會自動幫你把 UserDB 的資料關聯進來
+    comments = db.query(CommentDB).filter(CommentDB.post_id == post.id).all()
     
-    # 2. 創建新留言的響應物件
-    new_comment = CommentResponse(
-        author=comment_data.user, 
-        content=comment_data.content, 
-        time="剛剛" # 這裡應該是數據庫記錄的真實時間
+    return comments
+
+@router.post("/{slug}/comment", response_model=CommentResponse)
+def add_comment(slug: str, comment_data: CommentCreate, db: Session = Depends(get_db)):
+    # 1. 驗證文章是否存在
+    post = db.scalar(select(PostDB).where(PostDB.slug == slug))
+    if not post:
+        raise HTTPException(status_code=404, detail="文章不存在")
+
+    # 2. 建立新留言 (假設我們現在還沒做登入，先暫時掛在 ID 1 帳號下測試)
+    # 如果你已經有登入功能，這裡應該用 current_user.id
+    new_comment = CommentDB(
+        content=comment_data.content,
+        post_id=post.id,
+        author_id=1,  # 先寫死成 1 號 (阿椎伯) 測試
+        is_anonymous=False # 這裡可以根據 comment_data 調整
     )
     
-    # 3. 返回新建立的留言物件 (前端只需將此物件添加到列表中即可)
+    db.add(new_comment)
+    db.commit()
+    db.refresh(new_comment) # 重新整理以獲取關聯的作者資料
+    
     return new_comment
-    
-    # 注意：您的前端要求返回的數據中包含 likes 和 comments
-    # 所以我們返回一個包含兩者的結構，或者只返回 comments 讓前端自己更新
-    
-    # 為了符合前端的 data.comments 和 data.likes 邏輯，我們返回完整結構：
-    return {
-        "likes": post.likes or 0, 
-        "comments": updated_comments # 替換成從資料庫獲取的所有留言
-    }
-
-@router.get("/{slug}/comments", response_model=List[CommentResponse], summary="獲取文章的留言列表")
-def list_comments_for_post(slug: str, db: Session = Depends(get_db)):
-    # 1. 查找文章 (可選，用於確保 slug 有效)
-    # post = db.scalar(select(PostDB).where(PostDB.slug == slug))
-    # if not post:
-    #     raise HTTPException(status_code=404, detail="Post not found")
-        
-    # 2. 【TODO】從資料庫查詢與該 slug 相關的所有留言
-    #    例如：db.query(CommentDB).filter(CommentDB.post_slug == slug).all()
-    
-    # 為了方便您測試前端，這裡返回模擬數據：
-    mock_comments = [
-        CommentResponse(author="專業人士", content="這是第一條真正的回答！", time="2025/11/10 18:00"),
-        CommentResponse(author="熱心網友", content="這個問題很有趣，我的看法是...", time="2025/11/10 19:15"),
-    ]
-    
-    return mock_comments

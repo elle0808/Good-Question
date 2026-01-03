@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict,Field,EmailStr
 from typing import Optional,List
+from datetime import datetime
 
 class UserBase(BaseModel):
     email: EmailStr
@@ -40,9 +41,9 @@ class PostResponse(PostBase):
 class CommentResponse(BaseModel):
     """用於回應前端的留言結構"""
     id: int
+    is_anonymous: bool
     author: UserResponse
     content: str
-    time: str = Field(..., example="2025/11/10 17:01") # 新增時間欄位，方便前端顯示
-    
+    time: datetime
     # 支援 ORM 模式
     model_config = ConfigDict(from_attributes=True)

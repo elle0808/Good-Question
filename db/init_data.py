@@ -4,9 +4,10 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import OperationalError
 
 from .engine import engine
-from models.posts import PostDB
+from models.posts import PostDB,UserDB
 from models.base import Base # <--- 引入 Base，用於創建資料表結構
 from data.init_posts import posts
+from data.init_users import users
 
 logger = logging.getLogger(__name__)
 
@@ -23,50 +24,51 @@ def create_tables():
         logger.error(f"資料表創建失敗 (可能是連線問題或權限): {e}")
         raise # 必須拋出錯誤，確保啟動失敗
 
-# --- 2. 初始資料匯入 (Data Initialization) ---
-def init_posts_data(session: Session): # <--- 接受 Session 作為參數
-    """初始化文章資料"""
-    # 注意：這裡不再需要建立 Session，直接使用傳入的 session
+def init_all_data(session: Session):
+    """初始化使用者與文章資料"""
     
-    # 檢查資料庫是否已有文章資料
-    existing_posts_count = session.query(PostDB).count()
-        
-    if existing_posts_count > 0:
-        logger.info(f"資料庫已有 {existing_posts_count} 筆文章，跳過文章資料初始化")
-        return
-        
-    logger.info("開始匯入文章初始資料...")
-        
-    try:
-        # 匯入初始資料
-        for post_data in posts:
-            post = PostDB(
-                slug=post_data["slug"],
-                title=post_data["title"],
-                author=post_data["author"],
-                content=post_data["content"],
-                image_url=post_data["image_url"],
-                tags=post_data.get("tags", []) # 使用 .get 確保資料健壯性
+    # A. 先檢查並匯入使用者
+    if session.query(UserDB).count() == 0:
+        logger.info("開始匯入使用者初始資料...")
+        created_users = []
+        for u_data in users:
+            user = UserDB(
+                username=u_data["username"],
+                email=u_data["email"],
+                hashed_password=u_data["password"] # <--- 暫不加密，直接存明文
             )
-            session.add(post)
-            
-        session.commit()
-        logger.info(f"成功匯入 {len(posts)} 筆文章資料")
-            
-    except Exception as e:
-        session.rollback() # 發生錯誤時必須回滾
-        logger.error(f"文章資料匯入失敗: {e}")
-        raise
+            session.add(user)
+            created_users.append(user)
+        session.commit() # 提交後才能拿到 user.id
+    else:
+        created_users = session.query(UserDB).all()
+
+    # B. 檢查並匯入文章
+    if session.query(PostDB).count() == 0:
+        logger.info("開始匯入文章初始資料...")
+        try:
+            for post_data in posts:
+                # 這裡假設所有初始文章都掛在第一個使用者 (admin) 名下
+                post = PostDB(
+                    slug=post_data["slug"],
+                    title=post_data["title"],
+                    author_id=created_users[0].id, # <--- 改用 ID 關聯
+                    content=post_data["content"],
+                    image_url=post_data.get("image_url", ""),
+                    is_anonymous=post_data.get("is_anonymous", False),# 新增的欄位
+                    tags=post_data.get("tags", [])
+                )
+                session.add(post)
+            session.commit()
+            logger.info("成功匯入文章資料")
+        except Exception as e:
+            session.rollback()
+            logger.error(f"文章資料匯入失敗: {e}")
+            raise
 
 # --- 3. 總初始化函數 ---
-def init_database(db: Session): # <--- 接受 db/session 作為參數
-    """初始化整個資料庫（包含結構創建與所有資料表的初始資料）"""
+def init_database(db: Session):
     logger.info("開始初始化資料庫結構與資料...")
-    
-    # 1. 創建資料表結構 (必須先做這一步)
     create_tables()
-
-    # 2. 初始化文章資料 (將 Session 傳入)
-    init_posts_data(db)
-
+    init_all_data(db) # 呼叫新的整合匯入函數
     logger.info("資料庫結構與資料初始化完成")
