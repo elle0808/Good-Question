@@ -9,10 +9,10 @@ from typing import List, Optional
 class UserDB(Base):
     __tablename__ = "users"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[str] = mapped_column(primary_key=True)
     username: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     email: Mapped[str] = mapped_column(String(200), unique=True, nullable=False)
-    hashed_password: Mapped[str] = mapped_column(String(200), nullable=False)
+    hashed_password: Mapped[str] = mapped_column(Text, nullable=False)
 
     # 虛擬連結：讓這個 User 可以直接透過 .posts 看到他所有的文章
     posts: Mapped[List["PostDB"]] = relationship(back_populates="author")
@@ -52,7 +52,7 @@ class CommentDB(Base):
     post_id: Mapped[int] = mapped_column(ForeignKey("posts.id", ondelete="CASCADE"))
     
     # 外鍵：這條留言是誰寫的？
-    author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    author_id: Mapped[str] = mapped_column(ForeignKey("users.id"))
 
     # 關聯設定：讓 SQLAlchemy 幫你自動抓作者資料
     author = relationship("UserDB")

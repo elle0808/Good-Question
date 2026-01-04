@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>文章頁</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./js/auth.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
@@ -13,10 +15,13 @@
 
     <header class="font-['Roboto:Regular'] bg-[#F0E36E] flex justify-between items-center px-6 py-3">
         <h1 class="text-lg font-bold text-[#854D0C]"><a href="index.html">好問題！</a></h1>
-        <nav class="flex items-center space-x-6">
+        <nav class="flex items-center space-x-3">
             <a href="list.html" class="text-[#854D0C] hover:text-[#FF9925] duration-300">最新問題</a>
-            <button class="bg-[#F79C33] text-white px-4 py-1.5 rounded-lg hover:bg-[#F9BB48] duration-300 transition"
-                onclick="openLoginModal()">登入 / 註冊</button>
+            <div id="auth-area">
+                <button
+                    class="bg-[#F79C33] text-white px-4 py-1.5 rounded-lg hover:bg-[#F9BB48] duration-300 transition"
+                    onclick="openLoginModal()">登入 / 註冊</button>
+            </div>
         </nav>
     </header>
 
@@ -45,7 +50,7 @@
                 <h2 class="text-2xl font-bold mb-4 text-gray-800">回答</h2>
 
                 <div class="bg-white p-2 rounded-[50px] border-[3px] border-[#F0E36E] mb-4">
-                    <input type="text" placeholder="我要回答..."
+                    <input type="text" placeholder="我想說..." id="comment-input"
                         class="w-full p-2 border-none bg-transparent placeholder-gray-400 focus:outline-none text-gray-800">
                 </div>
 
@@ -67,30 +72,30 @@
     <dialog id="loginDialog" class="backdrop:bg-black/60 backdrop:backdrop-blur-sm bg-transparent focus:outline-none">
         <div class="relative bg-white border-[#f0e36e] border-[6px] rounded-[40px] md:rounded-[80px] h-auto min-h-[60vh] w-[90vw] max-w-[500px] overflow-hidden shadow-2xl scale-95 transition-transform duration-300 p-8 flex flex-col items-center"
             id="modalContent">
-            <h2 class="mt-8 mb-10 font-bold text-[#f19124] text-4xl md:text-5xl select-none text-center">
+            <h2 class="mt-8 mb-10 font-bold text-[#f19124] text-3xl md:text-4xl select-none text-center">
                 登入
             </h2>
             <div class="w-full space-y-6 flex flex-col items-center">
                 <div
-                    class="w-full h-16 md:h-20 flex items-center px-6 bg-white border-[#f0e36e] border-[4px] rounded-full transition-all focus-within:border-[#f19124]">
+                    class="w-full h-16 flex items-center px-6 bg-white border-[#f0e36e] border-[4px] rounded-full transition-all focus-within:border-[#f19124]">
                     <label class="text-[#f19124] text-lg md:text-xl shrink-0 select-none">帳號：</label>
                     <input type="text" id="username" name="username"
                         class="flex-1 bg-transparent text-lg md:text-xl text-[#b16208] focus:outline-none focus:ring-0 px-2"
                         placeholder=" 請輸入帳號(email)" />
                 </div>
                 <div
-                    class="w-full h-16 md:h-20 flex items-center px-6 bg-white border-[#f0e36e] border-[4px] rounded-full transition-all focus-within:border-[#f19124]">
+                    class="w-full h-16 flex items-center px-6 bg-white border-[#f0e36e] border-[4px] rounded-full transition-all focus-within:border-[#f19124]">
                     <label class="text-[#f19124] text-lg md:text-xl shrink-0 select-none">密碼：</label>
                     <input type="password" id="password" name="password"
                         class="flex-1 bg-transparent text-lg md:text-xl text-[#b16208] focus:outline-none focus:ring-0 px-2" />
                 </div>
                 <div class="flex gap-6 mt-2">
-                    <button
+                    <button onclick="switchToRegister()"
                         class="text-[#b16208] text-base md:text-lg hover:text-[#f19124] transition-colors">註冊</button>
                     <button
                         class="text-[#b16208] text-base md:text-lg hover:text-[#f19124] transition-colors">忘記密碼?</button>
                 </div>
-                <button
+                <button onclick="handleLogin()"
                     class="w-3/4 h-14 md:h-16 mt-6 bg-[#F0E36E] rounded-full text-[#b16208] text-xl md:text-2xl font-semibold hover:bg-[#F8EF9A] active:scale-95 transition-all shadow-md">
                     登入
                 </button>
@@ -98,28 +103,93 @@
 
         </div>
     </dialog>
+    <dialog id="registerDialog"
+        class="backdrop:bg-black/60 backdrop:backdrop-blur-sm bg-transparent focus:outline-none">
+        <div class="relative bg-white border-[#f0e36e] border-[6px] rounded-[40px] md:rounded-[80px] h-auto min-h-[60vh] w-[90vw] max-w-[500px] overflow-hidden shadow-2xl scale-95 transition-transform duration-300 p-8 flex flex-col items-center"
+            id="registerModalContent">
+            <h2 class="mt-8 mb-10 font-bold text-[#f19124] text-3xl md:text-4xl select-none text-center">
+                註冊新帳號
+            </h2>
+            <div class="w-full space-y-6 flex flex-col items-center">
+                <div
+                    class="w-full h-16 flex items-center px-6 bg-white border-[#f0e36e] border-[4px] rounded-full transition-all focus-within:border-[#f19124]">
+                    <label class="text-[#f19124] text-lg md:text-xl shrink-0 select-none">電子郵件：</label>
+                    <input type="email" id="reg-email"
+                        class="flex-1 bg-transparent text-lg md:text-xl text-[#b16208] focus:outline-none px-2"
+                        placeholder="example@mail.com" />
+                </div>
+                <div
+                    class="w-full h-16 flex items-center px-6 bg-white border-[#f0e36e] border-[4px] rounded-full transition-all focus-within:border-[#f19124]">
+                    <label class="text-[#f19124] text-lg md:text-xl shrink-0 select-none">使用者名稱：</label>
+                    <input type="text" id="reg-username"
+                        class="flex-1 bg-transparent text-lg md:text-xl text-[#b16208] focus:outline-none px-2"
+                        placeholder="輸入暱稱" />
+                </div>
+                <div
+                    class="w-full h-16 flex items-center px-6 bg-white border-[#f0e36e] border-[4px] rounded-full transition-all focus-within:border-[#f19124]">
+                    <label class="text-[#f19124] text-lg md:text-xl shrink-0 select-none">密碼：</label>
+                    <input type="password" id="reg-password"
+                        class="flex-1 bg-transparent text-lg md:text-xl text-[#b16208] focus:outline-none px-2"
+                        placeholder="輸入密碼" />
+                </div>
+
+                <div class="flex gap-6 mt-2">
+                    <button onclick="switchToLogin()"
+                        class="text-[#b16208] text-base md:text-lg hover:text-[#f19124] transition-colors">已有帳號？去登入</button>
+                </div>
+
+                <button onclick="handleRegister()"
+                    class="w-3/4 h-14 md:h-16 mt-6 bg-[#F0E36E] rounded-full text-[#b16208] text-xl md:text-2xl font-semibold hover:bg-[#F8EF9A] active:scale-95 transition-all shadow-md">
+                    註冊
+                </button>
+            </div>
+        </div>
+    </dialog>
 
     <script>
-        const modal = document.getElementById('loginDialog');
+        const loginModal = document.getElementById('loginDialog');
+        const regModal = document.getElementById('registerDialog');
 
+        // --- 登入視窗控制 ---
         function openLoginModal() {
-            modal.showModal();
-            // 讓視窗出現時有一點點放大效果
-            document.getElementById('modalContent').classList.remove('scale-95');
-            document.getElementById('modalContent').classList.add('scale-100');
+            loginModal.showModal();
+            document.getElementById('modalContent').classList.replace('scale-95', 'scale-100');
         }
 
         function closeLoginModal() {
-            modal.close();
-            document.getElementById('modalContent').classList.add('scale-95');
-            document.getElementById('modalContent').classList.remove('scale-100');
+            document.getElementById('modalContent').classList.replace('scale-100', 'scale-95');
+            setTimeout(() => loginModal.close(), 200);
+        }
+
+        // --- 註冊視窗控制 ---
+        function openRegisterModal() {
+            regModal.showModal();
+            document.getElementById('registerModalContent').classList.replace('scale-95', 'scale-100');
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModalContent').classList.replace('scale-100', 'scale-95');
+            setTimeout(() => regModal.close(), 200);
+        }
+
+        // --- 切換邏輯 ---
+        function switchToRegister() {
+            closeLoginModal();
+            setTimeout(() => openRegisterModal(), 300); // 稍微延遲讓動畫順暢
+        }
+
+        function switchToLogin() {
+            closeRegisterModal();
+            setTimeout(() => openLoginModal(), 300);
         }
 
         // 點擊背景遮罩關閉
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeLoginModal();
-            }
+        [loginModal, regModal].forEach(m => {
+            m.addEventListener('click', (e) => {
+                if (e.target === m) {
+                    m === loginModal ? closeLoginModal() : closeRegisterModal();
+                }
+            });
         });
     </script>
 
@@ -129,6 +199,38 @@
         const urlParams = new URLSearchParams(window.location.search);
         const postSlug = urlParams.get('slug');
 
+        // == 時間格式化工具 ==
+        // 1. 工具函數：回傳完整的時間字串
+        function getFullTimeString(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            const hh = String(date.getHours()).padStart(2, '0');
+            const mm = String(date.getMinutes()).padStart(2, '0');
+            return `${y}/${m}/${d} ${hh}:${mm}`;
+        }
+
+        // 2. 主函式：負責判斷要顯示幾分鐘前還是完整時間
+        function formatDate(dateString) {
+            if (!dateString) return "剛剛";
+            const now = new Date();
+            const past = new Date(dateString);
+
+            // 檢查日期是否有效
+            if (isNaN(past.getTime())) return dateString;
+
+            const diffInMs = now - past;
+            const diffInMins = Math.floor(diffInMs / (1000 * 60));
+
+            if (diffInMins < 1) return '剛剛';
+            if (diffInMins < 60) return `${diffInMins} 分鐘前`;
+
+            const diffInHours = Math.floor(diffInMins / 60);
+            if (diffInHours < 24) return `${diffInHours} 小時前`;
+
+            // 關鍵修正：超過 24 小時，呼叫「工具人」回傳字串，而不是呼叫自己
+            return getFullTimeString(past);
+        }
         // ----------------------------------------------------
         // [渲染函數 - 保持不變]
         // ----------------------------------------------------
@@ -136,7 +238,7 @@
             // ... (保持原樣，這裡需要 article 物件) ...
             document.getElementById('article-title').textContent = article.title;
             document.getElementById('article-author').textContent = (article.author && article.author.username) ? article.author.username : '匿名作者';
-            document.getElementById('article-time').textContent = article.time;
+            document.getElementById('article-time').textContent = formatDate(article.time);
             document.getElementById('article-content').innerHTML = article.content ? article.content.replace(/\n/g, '<br>') : '沒有內容';
 
             const tagsContainer = document.getElementById('article-tags-container');
@@ -172,7 +274,7 @@
                 <span class="flex items-center">
                     <i class="fas fa-user-circle mr-1 text-gray-600"></i> ${displayName}
                 </span>
-                <span>${answer.time || '剛剛'}</span>
+                <span>${formatDate(answer.time)}</span>
             </div>
             <div class="text-gray-700">
                 ${answer.content}
@@ -268,6 +370,52 @@
                     `無法從伺服器獲取數據。<br>錯誤詳情: ${error.message}`;
             }
         }
+
+        // === 留言送出邏輯 ===
+        async function submitComment() {
+            const inputEl = document.getElementById('comment-input');
+            const content = inputEl.value.trim();
+            const token = localStorage.getItem('supabase_token');
+
+            if (!content) return; // 沒寫東西就不送出
+
+            // 檢查登入狀態
+            if (!token) {
+                alert("請先登入才能回答問題喔！");
+                openLoginModal();
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/${postSlug}/comment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` // 帶上 Supabase 的通行證
+                    },
+                    body: JSON.stringify({ content: content })
+                });
+
+                if (response.ok) {
+                    inputEl.value = ''; // 清空輸入框
+                    alert("回答成功！");
+                    location.reload(); // 重新整理看到新留言
+                } else {
+                    const errorData = await response.json();
+                    alert("留言失敗：" + (errorData.detail || "伺服器錯誤"));
+                }
+            } catch (error) {
+                console.error("留言發生錯誤:", error);
+                alert("網路連線異常，請稍後再試");
+            }
+        }
+
+        // 監聽輸入框的 Enter 鍵
+        document.getElementById('comment-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                submitComment();
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', loadPostData);
     </script>

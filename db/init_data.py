@@ -2,6 +2,7 @@
 import logging
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import OperationalError
+import uuid
 
 from .engine import engine
 from models.posts import PostDB,UserDB
@@ -33,6 +34,7 @@ def init_all_data(session: Session):
         created_users = []
         for u_data in users:
             user = UserDB(
+                id=u_data["id"],  # 使用 UUID 作為使用者ID
                 username=u_data["username"],
                 email=u_data["email"],
                 hashed_password=u_data["password"] # <--- 暫不加密，直接存明文
